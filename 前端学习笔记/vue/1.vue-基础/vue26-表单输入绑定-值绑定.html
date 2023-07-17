@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<h1>值绑定</h1>
+		<p>对于单选按钮，复选框及选择框的选项，v-model 绑定的值通常是静态字符串 (对于复选框也可以是布尔值)：</p>
+		<!-- 当选中时，`picked` 为字符串 "a" -->
+		<input type="radio" v-model="picked" value="a">
+		
+		<!-- `toggle` 为 true 或 false -->
+		<input type="checkbox" v-model="toggle">
+		
+		<!-- 当选中第一个选项时，`selected` 为字符串 "abc" -->
+		<select v-model="selected">
+		  <option value="abc">ABC</option>
+		</select>
+		<p>但是有时我们可能想把值绑定到 Vue 实例的一个动态 property 上，这时可以用 v-bind 实现，并且这个 property 的值可以不是字符串。</p>
+		<div id="app">
+			<h2>复选框</h2>
+			<p>这里的 true-value 和 false-value attribute 并不会影响输入控件的 value attribute，因为浏览器在提交表单时并不会包含未被选中的复选框。如果要确保表单中这两个值中的一个能够被提交，(即“yes”或“no”)，请换用单选按钮。</p>
+			<input type="checkbox" v-model="toggle" true-value="yes" false-value="no" >
+			<p><span>checkbox's value: {{toggle}}</span></p>			
+			
+			<h2>单选按钮</h2>
+			<input type="radio" v-model="pick" v-bind:value="a">
+			<p><span>radio button's value:{{pick}}</span></p>
+			
+			<h2>选择框的选项</h2>
+			<select v-model="selected">
+			    <!-- 内联对象字面量 -->
+			  <option v-bind:value="{ number: '123' }">123</option>
+			</select>
+			<p><span>selected's value:{{selected}}</span></p>
+			<p><span>number's value:{{selected.number}}</span></p>
+		</div>
+		
+		
+		<!-- ==========================内容脚本分界线=============================== -->
+		<script src="vue-2.7.14.js"></script>
+		<script type="text/javascript">
+			let vm=new Vue({
+				el:'#app',
+				data:{
+					toggle:'no',
+					pick:'',
+					a:'ftt',
+					selected:'',
+				}
+			})
+		</script>
+		
+	</body>
+</html>

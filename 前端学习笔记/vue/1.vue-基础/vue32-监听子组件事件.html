@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<h1>监听子组件事件</h1>
+		<p>在我们开发 <blog-post> 组件时，它的一些功能可能要求我们和父级组件进行沟通。例如我们可能会引入一个辅助功能来放大博文的字号，同时让页面的其它部分保持默认的字号。</p>
+		<div id="app">			
+			<p>在其父组件中，我们可以通过添加一个 postFontSize 数据 property 来支持这个功能：</p>
+			<p>当点击这个按钮时，我们需要告诉父级组件放大所有博文的文本。 幸好 Vue 实例提供了一个自定义事件的系统来解决这个问题。 父级组件可以像处理 native DOM 事件一样通过 监听子组件实例的任意事件：v-on</p>
+			<p>同时子组件可以通过调用内建的 $emit 方法并传入事件名称来触发一个事件：</p>
+			<div :style="{fontSize: postFontSize+'em'}">
+				<blog-post 
+				v-for="post in posts" 
+				v-bind:key="post.id" 
+				v-bind:post="post"
+				v-on:enlarge-text="enlargeText()">
+				</blog-post>
+			</div>			
+			<p>有了这个 v-on:enlarge-text="postFontSize += 0.1" 监听器，父级组件就会接收该事件并更新 postFontSize 的值。</p>
+			
+		<h2>使用事件抛出一个值</h2>
+		<p>有的时候用一个事件来抛出一个特定的值是非常有用的。例如我们可能想让 <blog-post> 组件决定它的文本要放大多少。这时可以使用 $emit 的第二个参数来提供这个值：</p>
+		<!-- 
+			<button v-on:click="$emit('enlarge-text', 0.1)">
+			  Enlarge text
+			</button>
+		 -->
+		
+		<p>然后当在父级组件监听这个事件的时候，我们可以通过 $event 访问到被抛出的这个值：</p>
+		<!--
+			<blog-post
+			  ...
+			  v-on:enlarge-text="postFontSize += $event"
+			></blog-post>
+		 -->
+		
+		<p>或者，如果这个事件处理函数是一个方法：</p>
+		
+		<!--
+			<blog-post
+			  ...
+			  v-on:enlarge-text="onEnlargeText"
+			></blog-post>
+		 -->
+		 <p>那么这个值将会作为第一个参数传入这个方法：</p>
+		<!-- 
+			methods: {
+			  onEnlargeText: function (enlargeAmount) {
+			    this.postFontSize += enlargeAmount
+			  }
+			}
+		 -->
+		 
+		 <h2>在组件上使用 v-model</h2>
+		 <!-- 
+			自定义事件也可以用于创建支持 v-model 的自定义输入组件。记住：
+			
+			<input v-model="searchText">
+			等价于：
+			
+			<input
+			  v-bind:value="searchText"
+			  v-on:input="searchText = $event.target.value"
+			>
+		  -->
+		  
+		  <!--
+			当用在组件上时，v-model 则会这样：
+			
+			<custom-input
+			  v-bind:value="searchText"
+			  v-on:input="searchText = $event"
+			></custom-input>
+			
+			为了让它正常工作，这个组件内的 <input> 必须：
+			
+			将其 value attribute 绑定到一个名叫 value 的 prop 上
+			在其 input 事件被触发时，将新的值通过自定义的 input 事件抛出
+		   -->
+		 <custom-input v-model="searchText"></custom-input>
+		 <p><span>custom-input's value : {{searchText}}</span></p>
+		 
+		</div>
+		
+		<!-- ==========================内容脚本分界线=============================== -->
+		<script src="vue-2.7.14.js"></script>
+		<script type="text/javascript">
+			
+			Vue.component('blog-post',{
+				props:['post'],
+				template:`<div class="blog-post">
+				<h3>{{post.title}}</h3>
+				//现在我们在每篇博文正文之前添加一个按钮来放大字号：
+				<button v-on:click="$emit('enlarge-text')">enlarge text</button>
+				<div v-html="post.content"></div>
+				<p>{{post.time}}</p>
+				<hr>
+			</div>`
+			})
+			
+			Vue.component('custom-input',{
+				props:['value'],
+				template:`
+					<input
+					:value="value"
+					@input="$emit('input', $event.target.value)">
+				`
+			})
+			
+			let vm=new Vue({
+				el:'#app',
+				data:{
+					posts:[
+						{id:1,title:'bar',content:'111111111',time:Date.now()},
+						{id:2,title:'baz',content:'222222222',time:Date.now()},
+						{id:3,title:'foo',content:'333333333',time:Date.now()},
+						{id:4,title:'ofo',content:'444444444',time:Date.now()},
+					],
+					postFontSize:0.1,
+					searchText:111
+				},
+				methods:{
+					enlargeText(){
+						this.postFontSize+=0.1;
+					}
+				}
+			})
+		</script>
+		
+	</body>
+</html>

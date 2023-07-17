@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<div id="app">
+			<!-- 数据绑定最常见的形式就是使用“Mustache”语法 (双大括号) 的文本插值： -->
+			<span>Message:{{msg}}</span>
+			<hr />
+			<!-- 通过使用 v-once 指令，你也能执行一次性地插值，当数据改变时，插值处的内容不会更新。但请留心这会影响到该节点上的其它数据绑定： -->
+			<span v-once>{{msg}}</span>
+			<hr />
+			<button v-on:click="changeText">改变数据</button>
+			<hr />
+			<!-- 双大括号会将数据解释为普通文本，而非 HTML 代码。为了输出真正的 HTML，你需要使用 v-html 指令： -->
+			<!-- 注意：动态渲染的任意 HTML 可能会非常危险，因为它很容易导致 XSS 攻击。请只对可信内容使用 HTML 插值，绝不要对用户提供的内容使用插值。 -->
+			<span>rawHtml:{{rawHtml}}</span>
+			<hr />
+			<span v-html="rawHtml"></span>
+			<hr />
+			
+			<!-- Mustache 语法不能作用在 HTML attribute 上，遇到这种情况应该使用 v-bind 指令： -->
+			<span v-bind:id="dynamicId"></span>
+			<hr />
+			
+			<!-- 对于布尔 attribute (它们只要存在就意味着值为 true)，v-bind 工作起来略有不同，在这个例子中： -->
+			<button id="attrTestBtn" v-bind:disabled="isButtonDisabled">属性</button>
+			<!-- 如果 isButtonDisabled 的值是 null、undefined 或 false，则 disabled attribute 甚至不会被包含在渲染出来的 <button> 元素中。 -->
+			<hr />
+			
+			<!-- 迄今为止，在我们的模板中，我们一直都只绑定简单的 property 键值。但实际上，对于所有的数据绑定，Vue.js 都提供了完全的 JavaScript 表达式支持。 -->
+			<span id="">{{number+1}}</span>
+			<hr />
+			{{ number + 1 }}
+			<hr />
+			{{ ok ? 'YES' : 'NO' }}
+			<hr />
+			{{ message.split('').reverse().join('') }}
+			<hr />
+			<div v-bind:id="'list-' + id">你好</div>
+			
+			<!-- 这些表达式会在所属 Vue 实例的数据作用域下作为 JavaScript 被解析。有个限制就是，每个绑定都只能包含单个表达式，所以下面的例子都不会生效。 -->
+			<!-- 这是语句，不是表达式 -->
+			<!-- {{ var a = 1 }} -->
+			
+			<!-- 流控制也不会生效，请使用三元表达式 -->
+			<!-- {{ if (ok) { return message } }} -->
+			<!-- 模板表达式都被放在沙盒中，只能访问全局变量的一个白名单，如 Math 和 Date 。你不应该在模板表达式中试图访问用户定义的全局变量。 -->
+			
+		</div>
+		
+		
+		<!-- ==========================内容脚本分界线=============================== -->
+		<script src="vue-2.4.0.js"></script>
+		
+		<script type="text/javascript">
+			let vm=new Vue({
+				el:'#app',
+				data:{
+					msg:'Hello world',
+					rawHtml:'<span style="color: red;">this is should be red</span>',
+					dynamicId:'textContent',
+					isButtonDisabled:null,
+					number:20,
+					ok:false,
+					message:'Hello world',
+					id:'a45dad45a4dad'
+				},
+				methods:{
+					changeText(){
+						this.msg='hhhhhh'
+					}
+				}
+			});
+			
+			//获取
+			console.log(document.getElementById("textContent"))
+			
+			//如果强行输出，会提示Uncaught ReferenceError: $ is not defined
+			//console.log($("#attrTestBtn").attr("disabled"))
+		</script>
+		
+		<script>
+			console.log("================")
+			console.log(document.getElementById("list-a45dad45a4dad"))
+		</script>
+	</body>
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<h1>传递静态或动态 Prop</h1>
+		<div id="app">
+			<!-- 可以像这样给 prop 传入一个静态的值： -->
+			<static-post title="My journey with Vue"></static-post>
+			
+			<p>你也知道 prop 可以通过 v-bind 动态赋值，例如：</p>
+			<!-- 动态赋予一个变量的值 -->
+			<blog-post v-bind:post="post" v-bind:title="post.title"></blog-post>
+			
+			<!-- 动态赋予一个复杂表达式的值 -->
+			<blog-post
+				v-bind:post="post"
+			  v-bind:title="post.title + ' by ' + post.author.name"
+			></blog-post>
+			
+			<!-- 在上述两个示例中，我们传入的值都是字符串类型的，但实际上任何类型的值都可以传给一个 prop -->			
+		</div>
+		
+		<!-- ===========================================内容脚本分界线=========================================== -->
+		<script src="../statics/vue-2.7.14.js"></script>
+		<script type="text/javascript">
+			
+			Vue.component('numeric-test',{})
+			
+			Vue.component('static-post',{
+				props:['title'],
+				template:'<div><h3>{{title}}</h3> <hr></div>'
+			})
+			
+			Vue.component('blog-post',{
+				props:['post'],
+				template:
+					`<div class="blog-post">
+						<h3>{{post.title}}</h3>
+						<div v-html="post.content"></div>
+						<p>{{post.time}}</p>
+						<hr>
+					</div>`
+			})
+			
+			let vm=new Vue({
+				el:'#app',
+				data:{
+					post:{
+						title:'t1',
+						author:{name:'千树'},
+						content:'vue太好用辣！'
+					}
+				}
+			})
+		</script>
+	</body>
+</html>

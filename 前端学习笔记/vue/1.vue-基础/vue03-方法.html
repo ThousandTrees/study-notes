@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		
+	</head>
+	<body>
+		<div id="example">
+			<p>{{v1}}</p>
+			<button v-on:click="v1=666666">change it</button>
+		</div>
+		
+		<script src="vue-2.4.0.js"></script>
+		<script type="text/javascript">
+			let data={v1:123456}
+			let vm=new Vue({
+				el:'#example',
+				data:data
+			})
+			
+			//通过$符号可以拿到Vue内部的对象
+			console.log(vm.$data===data)
+			console.log(vm.$el===document.getElementById('example'))
+			
+			//vue的监听方法,v1值改变的时候会执行回调函数
+			vm.$watch('v1', function(newV,oldV){
+				console.log("oldV=>"+oldV);
+				console.log("======================");
+				console.log("newV=>"+newV);
+			})
+			
+		</script>
+	</body>
+	
+</html>

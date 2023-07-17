@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+	<body>
+		<h1>在 v-for 里使用范围值</h1>
+		<div id="app">
+			<p>v-for 也可以接受整数。在这种情况下，它会把模板重复对应次数。</p>
+			<span v-for="n in 10">{{n}} </span>
+			
+			
+		</div>
+		
+		
+		
+		<!-- ==========================内容脚本分界线=============================== -->
+		<script src="vue-2.7.14.js"></script>
+		<script type="text/javascript">
+			let vm=new Vue({
+				el:'#app',
+				data:{
+					ok:false
+				}
+			})
+		</script>
+		
+	</body>
+</html>

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+	<body>
+		<h1>组件基础</h1>
+		<div id="app">
+			<h2>基本示例</h2>
+			<p>因为组件是可复用的 Vue 实例，所以它们与 new Vue 接收相同的选项，例如 data、computed、watch、methods 以及生命周期钩子等。仅有的例外是像 el 这样根实例特有的选项。</p>
+			<p>组件是可复用的 Vue 实例，且带有一个名字：在这个例子中是 &lt;button-counter>。我们可以在一个通过 new Vue 创建的 Vue 根实例中，把这个组件作为自定义元素来使用：</p>
+			<button-counter></button-counter>	
+					
+			<h2>组件的复用</h2>
+			<p>你可以将组件进行任意次数的复用：</p>
+			<div id="components-demo">
+			  <button-counter></button-counter><br>
+			  <button-counter></button-counter><br>
+			  <button-counter></button-counter><br>
+			</div>
+			<p>注意当点击按钮时，每个组件都会各自独立维护它的 count。因为你每用一次组件，就会有一个它的新实例被创建。</p>
+			<h3>data 必须是一个函数</h3>
+			<p>当我们定义这个 <button-counter> 组件时，你可能会发现它的 data 并不是像这样直接提供一个对象：</p>
+			<!-- 
+				data: {
+				  count: 0
+				}
+			 -->
+			 <p>取而代之的是，一个组件的 data 选项必须是一个函数，因此每个实例可以维护一份被返回对象的独立的拷贝：</p>
+			 <p>如果 Vue 没有这条规则，点击一个按钮就可能会像如下代码一样影响到其它所有实例</p>
+			 
+			 <h2>组件的组织</h2>
+			 <p>通常一个应用会以一棵嵌套的组件树的形式来组织：</p>
+			 <img  src="images/components.png" style="width: 30%;height: 25%;"/>
+			 <p>例如，你可能会有页头、侧边栏、内容区等组件，每个组件又包含了其它的像导航链接、博文之类的组件。</p>
+			 <p>为了能在模板中使用，这些组件必须先注册以便 Vue 能够识别。这里有两种组件的注册类型：全局注册和局部注册。至此，我们的组件都只是通过 Vue.component 全局注册的：</p>
+			 <!-- 
+			 Vue.component('my-component-name', {
+			   // ... options ...
+			 })
+			  -->
+			 <p>全局注册的组件可以用在其被注册之后的任何 (通过 new Vue) 新创建的 Vue 根实例，也包括其组件树中的所有子组件的模板中。</p>
+			 
+		</div>
+		
+		<!-- ==========================内容脚本分界线=============================== -->
+		<script src="vue-2.7.14.js"></script>
+		<script type="text/javascript">
+			// 定义一个名为 button-counter 的新组件
+			let button_counter=Vue.component('button-counter',{
+				data(){return {count:0}},
+				template:'<button @click="count++">You clicked me {{count}} times</button>'
+			});
+			
+			
+			
+			let vm=new Vue({
+				el:'#app',
+				data:{
+					ok:false
+				}
+			})
+		</script>
+		
+		
+		
+	</body>
+</html>

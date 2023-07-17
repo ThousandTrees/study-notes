@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+
+	<body>
+		<div id="app">
+			<p>类似于 v-if，你也可以利用带有 v-for 的  &lt;template> 来循环渲染一段包含多个元素的内容。比如：</p>
+			<ul>
+				<template v-for="item in items">
+					<li>{{item.msg}}</li>
+					<li class="divider" role="presentation">xxx</li>
+					<hr>
+				</template>
+			</ul>
+		</div>
+		
+		<!-- ==========================内容脚本分界线=============================== -->
+			<script src="vue-2.7.14.js"></script>
+			<script type="text/javascript">
+				let vm=new Vue({
+					el:'#app',
+					data:{
+						items:[{msg:'bar'},{msg:'foo'}]
+					}
+				})
+			</script>
+		</body>
+	</body>
+</html>

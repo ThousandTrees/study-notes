@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>	
+	</head>
+	<body>
+		
+		<!-- vue容器 -->
+		<div id="vue_container" style="font-size: 10px;">
+			<p>{{foo}}</p>
+			<button v-on:click="foo = 'baz'">Change it</button>
+		</div>
+		<button id="suspend"></button>
+	</body>
+	<!-- ==================================================================== -->
+	
+	<!-- vue文件位置，vue和script代码要放在body的最下面，才能让vue进行接管 -->
+	<script src="vue-2.4.0.js"></script>
+	<script type="text/javascript">
+		//数据在开始的时候是空值，但是后面要用到，可以先预定义一些属性，给默认值
+		let vm_data=new Vue({
+			data: {
+			  newTodoText: '',
+			  visitCount: 0,
+			  hideCompletedTodos: false,
+			  todos: [],
+			  error: null
+			}
+		});
+		
+		//冰冻属性--Object.freeze(),这时书香将会变为只读，无法重新赋值
+		data_freezed={foo:'bar'};
+		//Object.freeze(data_freezed);
+		new Vue({
+			el:'#vue_container',
+			data:data_freezed
+		});
+		
+	</script>
+</html>

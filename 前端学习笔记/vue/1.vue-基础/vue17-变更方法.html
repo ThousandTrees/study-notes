@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+	<body>
+		<h1>数组更新检测</h1>
+		<div id="app">
+			<h2>变更方法</h2>
+			<p>push()---pop()---shift()---unshift()---splice()---sort()---reverse()</p>
+			<ul id="example-1">
+				<li v-for="item in items" :key="item.message">
+				    {{ item.message }}
+				</li>
+			</ul>
+			<p>你可以打开控制台，然后对前面例子的 items 数组尝试调用变更方法。</p>
+			<p>比如 example1.items.push({ message: 'Baz' })。</p>
+			
+			<h2>替换数组</h2>
+			
+			<h2>注意事项</h2>
+			<p>由于 JavaScript 的限制，Vue 不能检测数组和对象的变化。深入响应式原理中有相关的讨论。</p>
+		</div>
+		
+		
+		<!-- ==========================内容脚本分界线=============================== -->
+		<script src="vue-2.7.14.js"></script>
+		<script type="text/javascript">
+			
+			
+			let example1=new Vue({
+				el:'#example-1',
+				data:{
+					items:[
+						{message:'Foo'},
+						{message:'Bar'},
+					]
+				}
+			});
+			/* 
+				变更方法，顾名思义，会变更调用了这些方法的原始数组。
+				相比之下，也有非变更方法，例如 filter()、concat() 和 slice()。
+				它们不会变更原始数组，而总是返回一个新数组。
+				当使用非变更方法时，可以用新数组替换旧数组：
+				 
+				 你可能认为这将导致 Vue 丢弃现有 DOM 并重新渲染整个列表。
+				 幸运的是，事实并非如此。
+				 Vue 为了使得 DOM 元素得到最大范围的重用而实现了一些智能的启发式方法，
+				 所以用一个含有相同元素的数组去替换原来的数组是非常高效的操作。
+			*/
+		   example1.items = example1.items.filter(function (item) {
+		     return item.message.match(/Foo/)
+		   })
+			
+		</script>
+		
+	</body>
+</html>

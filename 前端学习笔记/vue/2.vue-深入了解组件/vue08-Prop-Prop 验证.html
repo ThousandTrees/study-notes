@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>		
+		<div id="app">
+			<p>我们可以为组件的 prop 指定验证要求，例如你知道的这些类型。如果有一个需求没有被满足，则 Vue 会在浏览器控制台中警告你。这在开发一个会被别人用到的组件时尤其有帮助。</p>
+			<my-component
+				:prop-a="900"
+				:prop-b="false"
+			></my-component>
+			
+			<p>当 prop 验证失败的时候，(开发环境构建版本的) Vue 将会产生一个控制台的警告。</p>
+			<!-- Invalid prop: type check failed for prop "propB". Expected String, Number, got Boolean with value false. -->
+			<!-- 注意那些 prop 会在一个组件实例创建之前进行验证，所以实例的 property (如 data、computed 等) 在 default 或 validator 函数中是不可用的。 -->
+			
+		</div>		
+		<!-- ===========================================内容脚本分界线=========================================== -->
+		<script src="../statics/vue-2.7.14.js"></script>
+		<script type="text/javascript">
+			/* 为了定制 prop 的验证方式，你可以为 props 中的值提供一个带有验证需求的对象，而不是一个字符串数组. */
+			Vue.component('my-component', {
+			  props: {
+				// 基础的类型检查 (`null` 和 `undefined` 会通过任何类型验证)
+				propA: Number,
+				// 多个可能的类型
+				propB: [String, Number],
+				// 必填的字符串
+				propC: {
+				  type: String,
+				  required: true
+				},
+				// 带有默认值的数字
+				propD: {
+				  type: Number,
+				  default: 100
+				},
+				// 带有默认值的对象
+				propE: {
+				  type: Object,
+				  // 对象或数组默认值必须从一个工厂函数获取
+				  default: function () {
+					return { message: 'hello' }
+				  }
+				},
+				// 自定义验证函数
+				propF: {
+				  validator: function (value) {
+					// 这个值必须匹配下列字符串中的一个
+					return ['success', 'warning', 'danger'].includes(value)
+				  }
+				}
+			  }
+			})
+			
+			new Vue({
+				el:'#app',
+				data:{}
+			})
+			
+		</script>
+	</body>
+</html>

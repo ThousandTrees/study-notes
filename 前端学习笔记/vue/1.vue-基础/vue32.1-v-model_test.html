@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+
+	<body>
+		<!--
+			v-model笔记：
+				`v-model`本质是对`v-on`和`v-value`的封装，文档中说明它作用于<input>、<textarea> 及 <select> 。
+				v-model用在<input> 的text和textarea上时，会自动绑定input的value属性，同时会把输入的值给抛出(通过input事件)
+				
+				下面这两段代码是等价的
+				```html
+				<input v-model="searchText">
+				```
+				
+				```html
+				<input
+				  v-bind:value="searchText"
+				  v-on:input="searchText = $event.target.value"
+				>
+				```
+				----------------------------------------------------------------------------------------
+				```html
+				<script>
+				new Vue({
+					/*...*/
+					data:{
+						searchText:''
+					}
+				})
+				</script>
+				```
+				
+				checkbox 和 radio 使用 checked property 和 change 事件；
+				select 字段将 value 作为 prop 并将 change 作为事件。
+				同理可得：
+				
+				<checkbox v-model="checkBoxMsg">
+				等同于：
+				<checkbox :checked="checkBoxMsg" @change="checkBoxMsg= $event.target.value">
+				----------------------------------------------------------------------------
+				<select v-model="selectBoxMsg"></select>
+				等同于
+				<select :value="selectBoxMsg" @change="selectBoxMsg= $event.target.value">
+		================================================================================================
+				重点：$emit 方法的作用
+					emit
+					美 [ɪˈmɪt]
+					英 [ɪ'mɪt]
+					v.发出
+					网络：发射；放射；散发
+				emit就是模板内部的基础组件向模板抛出event和property，使模板在使用的时候，能够通过抛出的event和property出发基础组建的事件：
+				
+				```html
+				<body>
+				
+					<blog-post
+					  ...
+					  //2.然后用enlarge-text调用函数,组件的input事件被抛出后通过enlarge-text事件找到事件函数
+					  v-on:enlarge-text="postFontSize += 0.1">
+					</blog-post>
+					===================================================================================
+					<script>
+					Vue.component('blog-post', {
+					  props: ['post'],
+					  template: `
+						<div class="blog-post">
+						  <h3>{{ post.title }}</h3>
+						  
+						  //1.现在我们通过emit把事件函数抛出
+						  <button @click="$emit('enlarge-text')">
+							
+							Enlarge text
+						  </button>
+						  <div v-html="post.content"></div>
+						</div>
+					  `
+					})
+					<script>
+				</body>
+				```	
+				---------------------------------------------------------------------------------------
+				emit的第二个参数：
+				
+				emit除了可以抛出方法，同时也能抛出参数
+				
+				```html
+				<body>
+				
+					<blog-post
+					  ...
+					  //如果要访问抛出的值，需要使用`$event`
+					  v-on:enlarge-text="postFontSize += $event">
+					</blog-post>
+					
+					//也可以使用函数访问，这个值将会作为第一个参数传入这个方法，不用显式的声明onEnlargeText($event)
+					<blog-post
+					  ...
+					  v-on:enlarge-text="onEnlargeText">
+					</blog-post>
+					===================================================================================
+					<script>
+					Vue.component('blog-post', {
+					  props: ['post'],
+					  template: `
+						<div class="blog-post">
+						  <h3>{{ post.title }}</h3>
+						  //第二个参数是要抛出的参数
+						  <button @click="$emit('enlarge-text',0.1)">
+							Enlarge text
+						  </button>
+						  <div v-html="post.content"></div>
+						</div>
+					  `
+					})
+					
+					new Vue({
+						//...
+						methods:{
+							//这里的`enlargeAmount`就是通过emit抛出的值
+							onEnlargeText(enlargeAmount){
+								this.postFontSize+=enlargeAmount;
+							}
+						}
+					})
+					<script>
+				</body>
+				```	
+		 -->
+		 <!-- ===================================================================================== -->
+		 <img src="images/emit.png"/>
+		 <!-- 
+			基础部分解释完毕，下面再看在组件中使用v-model
+		  -->
+		<div id="app">
+			<p>
+				一般来说，v-model只适用于表单输入类型的标签，比如input,textarea... 自定义组件会绑定到默认的`value`属性和`input`事件，但是组件自己并不会带这两个东西,也就是说，组件本身不会做任何事情，做事情是靠组件内部的子组件实现的
+			</p>
+			<custom-input v-model="searchText"></custom-input>
+			<custom-input
+			  v-bind:value="searchText"
+			  v-on:input="searchText = $event"
+			></custom-input>
+			<p>{{searchText}}</p>
+			<img src="images/v-model.png">
+			
+		</div>
+		
+		<!-- ==========================内容脚本分界线=============================== -->
+		<script src="vue-2.7.14.js"></script>
+		<script type="text/javascript">
+			Vue.component('custom-input',{
+				props:['value'],
+				//通过prop:value向子组件传递数据
+				//通过$emit函数，把事件和输入的数据向外抛出
+				template:`<input 
+				:value="value" 
+				@input="$emit('input',$event.target.value)">`				
+			})
+			
+			
+			let vm=new Vue({
+				el:'#app',
+				data:{
+					searchText:"hello world"
+				}
+			})
+		</script>
+		
+	</body>
+</html>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+	<body>
+		<h1>绑定 HTML Class</h1>
+		<div id="app">
+			<h2>对象语法</h2>
+			<p>可以传给 v-bind:class 一个对象，以动态地切换 class：</p>
+			<div :class="{active: isActive}"></div>
+			<p>上面的语法表示 active 这个 class 存在与否将取决于数据 property isActive 的 truthiness。你可以在对象中传入更多字段来动态切换多个 class。</p>
+			
+			<p>v-bind:class 指令也可以与普通的 class attribute 共存。当有如下模板：</p>
+			<div
+			  class="static"
+			  v-bind:class="{ active: isActive, 'text-danger': hasError }"
+			></div>
+			<p>结果渲染为：</p>
+			<div class="static active"></div>
+			<p>当 isActive 或者 hasError 变化时，class 列表将相应地更新。例如，如果 hasError 的值为 true，class 列表将变为 "static active text-danger"。</p>
+			
+			<p>绑定的数据对象不必内联定义在模板里：</p>
+			<div v-bind:class="classObject"></div>
+			
+			<p>我们也可以在这里绑定一个返回对象的计算属性。这是一个常用且强大的模式：</p>
+			<div v-bind:class="classComputed"></div>
+			
+			<h2>数组语法</h2>
+			<p>我们可以把一个数组传给 v-bind:class，以应用一个 class 列表：</p>
+			<div v-bind:class="[activeClass, errorClass]"></div>
+			
+			<p>如果你也想根据条件切换列表中的 class，可以用三元表达式：</p>
+			<div :class="isActive?activeClass:'',errorClass"></div>
+			<p>这样写将始终添加 errorClass，但是只有在 isActive 是 truthy时才添加 activeClass。</p>
+			
+			<p>当有多个条件 class 时这样写有些繁琐。所以在数组语法中也可以使用对象语法</p>
+			<div :class="[{active:isActive},errorClass]"></div>
+			
+			<h2>用在组件上</h2>
+			<p>这个章节假设你已经对 Vue 组件有一定的了解。当然你也可以先跳过这里，稍后再回过头来看。</p>
+		</div>
+		
+		<!-- ==========================内容脚本分界线=============================== -->
+		<script src="vue-2.7.14.js"></script>
+		<script type="text/javascript">
+			let vm=new Vue({
+				el:'#app',
+				data:{
+					isActive:true,
+					//============================
+					hasError:false,
+					//============================
+					classObject:{
+						isActive:true,
+						hasError:false
+					},
+					error:null,
+					//============================
+					activeClass:'active',
+					errorClass:'text-danger'
+				},
+				computed:{
+					return {
+						active:this.isActive&&!this.error,
+						'text-danger':this.error&&this.error===fatal
+					}
+				}
+			})
+		</script>
+		
+	</body>
+</html>

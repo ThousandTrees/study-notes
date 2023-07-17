@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+	<body>
+		<div id="app">
+			<p>注意我们不推荐在同一元素上使用 v-if 和 v-for。更多细节可查阅风格指南。</p>
+			<p>当它们处于同一节点，v-for 的优先级比 v-if 更高，这意味着 v-if 将分别重复运行于每个 v-for 循环中。当你只想为部分项渲染节点时，这种优先级的机制会十分有用，如下：</p>
+			
+			<li v-for="todo in todo_list" v-if="!todo.isComplete">{{todo}}</li>
+			<p>上面的代码将只渲染未完成的 todo。</p>
+			<hr>
+			
+			<p>而如果你的目的是有条件地跳过循环的执行，那么可以将 v-if 置于外层元素 (或 &lt;template>) 上。如：</p>
+			<ul v-if="todo_list.length">
+			  <li v-for="todo in todo_list">
+			    {{ todo }}
+			  </li>
+			</ul>
+			<p v-else>No todos left!</p>
+			
+		</div>
+		<!-- ==========================内容脚本分界线=============================== -->
+		<script src="vue-2.7.14.js"></script>
+		<script type="text/javascript">
+			let vm=new Vue({
+				el:'#app',
+				data:{
+					todo_list:[
+						{msg:'brush teeth',isComplete:true},
+						{msg:'say good morning',isComplete:true},
+						{msg:'have luanch',isComplete:false},
+						{msg:'excercise',isComplete:false}
+					]
+				}
+			})
+		</script>
+	</body>
+</html>

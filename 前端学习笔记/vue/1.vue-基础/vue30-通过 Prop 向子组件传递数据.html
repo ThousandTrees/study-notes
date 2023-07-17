@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+	<body>
+		
+		<h1>通过 Prop 向子组件传递数据</h1>
+		<p>早些时候，我们提到了创建一个博文组件的事情。问题是如果你不能向这个组件传递某一篇博文的标题或内容之类的我们想展示的数据的话，它是没有办法使用的。这也正是 prop 的由来。</p>
+		<p>Prop 是你可以在组件上注册的一些自定义 attribute。当一个值传递给一个 prop attribute 的时候，它就变成了那个组件实例的一个 property。为了给博文组件传递一个标题，我们可以用一个 props 选项将其包含在该组件可接受的 prop 列表中：</p>
+		<div id="app">
+			<blog-post title="My journey with Vue"></blog-post>
+			<blog-post title="Blogging with Vue"></blog-post>
+			<blog-post title="Why Vue is so fun"></blog-post>
+			
+			<p>然而在一个典型的应用中，你可能在 data 里有一个博文的数组：</p>
+			<blog-post v-for="post in posts" v-bind:key="post.id" v-bind:title="post.title">
+			</blog-post>
+			<p>如上所示，你会发现我们可以使用 v-bind 来动态传递 prop。这在你一开始不清楚要渲染的具体内容，比如从一个 API 获取博文列表的时候，是非常有用的。</p>
+		</div>
+		
+		
+		<!-- ==========================内容脚本分界线=============================== -->
+		<script src="vue-2.7.14.js"></script>
+		<script type="text/javascript">
+			Vue.component('blog-post',{
+				props:['title'],
+				template:'<h3>{{title}}</h3>'
+			})
+			
+			let vm=new Vue({
+				el:'#app',
+				data:{
+					posts:[
+						{id:1,title:'my journey with vue'},
+						{id:2,title:'blogging with vue'},
+						{id:3,title:'why vue is so fun'},
+					]
+				}
+			})
+		</script>
+	</body>
+</html>

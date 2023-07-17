@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<script src="vue-2.4.0.js"></script>
+		<script type="text/javascript">
+			let data={
+				k1:'v1',
+				k2:'v2'
+			};
+			//创建一个vue实例
+			let vm_start=new Vue({
+				//el:'#div_container',
+				//一开始创建Vue就存在的属性才是响应式的
+				data:data,
+			});
+			
+			console.log(data.k1==vm_start.k1);
+			
+			console.log("=====================");
+			//响应式数据
+			data.k1='v4';
+			console.log(data.k1);
+			console.log(vm_start.k1);
+			
+			//新添加的属性不会触发响应式布局
+			console.log("=====================");
+			//vm.b=165465;
+			//console.log(vm.b);
+			//console.log(data.b);
+			
+		</script>
+	</head>
+	<body>
+		
+		<!-- vue容器 -->
+		<div id="div_container" style="font-size: 50px;">
+			
+		</div>
+		<button id="suspend"></button>
+	</body>
+</html>
