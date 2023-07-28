@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<div id="app">
+			<anchored-heading :level="1">www.hao123.com</anchored-heading>
+		</div>
+		<script src="../statics/vue-2.7.14.js"></script>
+		<script type="text/javascript">
+			Vue.component('anchored-heading',{
+				render(createElement){
+					let headingId=getChildrenTextContent(this.$slots.default)
+						.toLowerCase().replace(/\W+/g, '-').replace(/(^-|-$)/g, '');
+					/*
+						createElement()函数参数详解:
+						参数一：标签名或组件名，可以放入字符串，组建的Object，或者是返回上面两种类型结果的函数。
+						
+						参数二：与模板中`attribute`对应的数据对象，可选参数
+						
+						参数三：子级虚拟节点，可选参数
+					*/
+					return createElement(
+						//第一参数，标签名，标题
+						'h'+this.level,
+						
+						//第三参数，子级节点
+						[	
+							createElement(
+								'a', //第一参数，a标签{String | Object | Function}
+								
+								{
+									//标签属性
+									attrs:{
+										name: headingId,	//标签名
+										href: '#' + headingId	,//标签导向地址
+									}
+								}, // {Object}
+							
+								this.$slots.default // 子级节点，是默认插槽的内容{String | Array}
+							)
+						]
+					)
+				},//渲染结果：<h1><a name="www-hao123-com" href="#www-hao123-com">www.hao123.com</a></h1>
+				props:{
+					level: {
+						type: Number,
+						required: true
+					}
+				}
+			})
+			
+			function getChildrenTextContent(children) {
+			  return children.map(function (node) {
+			    return node.children
+			      ? getChildrenTextContent(node.children)
+			      : node.text
+			  }).join('')
+			}
+			
+			let vm=new Vue({
+				el:'#app'
+			})
+		</script>
+	</body>
+</html>

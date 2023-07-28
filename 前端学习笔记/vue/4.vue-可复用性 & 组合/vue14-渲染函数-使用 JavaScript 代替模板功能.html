@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<!-- 
+			# v-if 和 v-for
+			只要在原生的 JavaScript 中可以轻松完成的操作，Vue 的渲染函数就不会提供专有的替代方法。比如，在模板中使用的 v-if 和 v-for：
+			<ul v-if="items.length">
+			  <li v-for="item in items">{{ item.name }}</li>
+			</ul>
+			<p v-else>No items found.</p>
+			
+			props: ['items'],
+			render: function (createElement) {
+			  if (this.items.length) {
+			    return createElement('ul', this.items.map(function (item) {
+			      return createElement('li', item.name)
+			    }))
+			  } else {
+			    return createElement('p', 'No items found.')
+			  }
+			}
+			
+			--------------------------------------------------------------------------------------------
+			
+			# v-model
+			渲染函数中没有与 v-model 的直接对应——你必须自己实现相应的逻辑：
+			props: ['value'],
+			render: function (createElement) {
+			  var self = this
+			  return createElement('input', {
+			    domProps: {
+			      value: self.value
+			    },
+			    on: {
+			      input: function (event) {
+			        self.$emit('input', event.target.value)
+			      }
+			    }
+			  })
+			}
+			
+			--------------------------------------------------------------------------------------------
+			
+			# 事件 & 按键修饰符
+			对于 .passive、.capture 和 .once 这些事件修饰符，Vue 提供了相应的前缀可以用于 on：
+			修饰符			前缀
+			.passive		&
+			.capture		!
+			.once			~
+			.capture.once 或
+			.once.capture	~!
+			
+			这里是一个使用所有修饰符的例子：
+			on: {
+			  keyup: function (event) {
+			    // 如果触发事件的元素不是事件绑定的元素
+			    // 则返回
+			    if (event.target !== event.currentTarget) return
+			    // 如果按下去的不是 enter 键或者
+			    // 没有同时按下 shift 键
+			    // 则返回
+			    if (!event.shiftKey || event.keyCode !== 13) return
+			    // 阻止 事件冒泡
+			    event.stopPropagation()
+			    // 阻止该元素默认的 keyup 事件
+			    event.preventDefault()
+			    // ...
+			  }
+			  
+			--------------------------------------------------------------------------------------------
+			
+			你可以通过 this.$slots 访问静态插槽的内容，每个插槽都是一个 VNode 数组：
+			render: function (createElement) {
+			  // `<div><slot></slot></div>`
+			  return createElement('div', this.$slots.default)
+			}
+			
+			也可以通过 this.$scopedSlots 访问作用域插槽，每个作用域插槽都是一个返回若干 VNode 的函数：
+			props: ['message'],
+			render: function (createElement) {
+			  // `<div><slot :text="message"></slot></div>`
+			  return createElement('div', [
+			    this.$scopedSlots.default({
+			      text: this.message
+			    })
+			  ])
+			}
+			
+			如果要用渲染函数向子组件中传递作用域插槽，可以利用 VNode 数据对象中的 scopedSlots 字段：
+			render: function (createElement) {
+			  // `<div><child v-slot="props"><span>{{ props.text }}</span></child></div>`
+			  return createElement('div', [
+			    createElement('child', {
+			      // 在数据对象中传递 `scopedSlots`
+			      // 格式为 { name: props => VNode | Array<VNode> }
+			      scopedSlots: {
+			        default: function (props) {
+			          return createElement('span', props.text)
+			        }
+			      }
+			    })
+			  ])
+			}
+		-->
+	</head>
+	<body>
+		<div id="app">
+			
+		</div>
+		<script src="../statics/vue-2.7.14.js"></script>
+		<script type="text/javascript">
+			 
+			 
+			 let vm=new Vue({
+				 el:'#app',
+				 data:{
+					 
+				 }
+			 })
+		</script>
+	</body>
+</html>

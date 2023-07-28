@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<div id="app">
+			<!-- 自定义选项将使用默认策略，即简单地覆盖已有值。如果想让自定义选项以自定义逻辑合并，可以向 Vue.config.optionMergeStrategies 添加一个函数： -->
+		</div>
+		<script src="../statics/vue-2.7.14.js"></script>
+		<script type="text/javascript">
+			Vue.config.optionMergeStrategies.myOption=function(toVal,fromVal){
+				
+			};
+			
+			let strategies=Vue.config.optionMergeStrategies
+			strategies.myOption = strategies.methods
+			
+			//案例
+			const merge = Vue.config.optionMergeStrategies.computed
+			Vue.config.optionMergeStrategies.vuex = function (toVal, fromVal) {
+			  if (!toVal) return fromVal//如果toVa
+			  if (!fromVal) return toVal
+			  cosn
+			  return {
+			    getters: merge(toVal.getters, fromVal.getters),
+			    state: merge(toVal.state, fromVal.state),
+			    actions: merge(toVal.actions, fromVal.actions)
+			  }
+			}
+		</script>
+	</body>
+</html>

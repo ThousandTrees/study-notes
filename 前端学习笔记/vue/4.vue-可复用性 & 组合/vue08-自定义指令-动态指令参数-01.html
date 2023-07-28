@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<div id="app">
+			<P>Scroll down inside this section ↓</P>
+			<p v-pin:[direction]='200'>I am pinned onto the page at 200px to the left.</p>
+		</div>
+		<script src="../statics/vue-2.7.14.js"></script>
+		<script type="text/javascript">
+			Vue.directive('pin',{
+				bind(el,binding,vnode){
+						el.style.position='fixed'
+						let s=(binding.arg=='left'?'left':'top')
+						el.style[s]=binding.value+'px'
+				}
+			})
+			
+			new Vue({
+				el:'#app',
+				data(){
+					return{
+						direction:'left'
+					}
+				}
+			})
+			
+		</script>
+	</body>
+</html>
