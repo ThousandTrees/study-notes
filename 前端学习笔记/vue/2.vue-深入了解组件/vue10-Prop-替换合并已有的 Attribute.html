@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<div id="app">
+			
+		</div>
+		<script src="../statics/vue-2.7.14.js"></script>
+		<script type="text/javascript">
+			Vue.component('bootstrap-date-input',{
+				
+				//在这种情况下，我们定义了两个不同的 class 的值：
+
+				/* 
+					form-control，这是在组件的模板内设置好的
+				date-picker-theme-dark，这是从组件的父级传入的 
+					
+					对于绝大多数 attribute 来说，从外部提供给组件的值会替换掉组件内部设置好的值。所以如果传入 type="text" 就会替换掉 type="date" 并把它破坏！庆幸的是，class 和 style attribute 会稍微智能一些，即两边的值会被合并起来，从而得到最终的值：form-control date-picker-theme-dark。
+				*/
+				props:['data-date-picker','class'],
+				template:'<input type="date" class="form-control">'
+			});
+			
+			new Vue({
+				el:'#app',
+				data:{
+					
+				}
+			})
+		</script>
+	</body>
+</html>

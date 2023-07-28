@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<div id="app">
+			<!-- 
+				在有些情况下，我们可能需要对一个 prop 进行“双向绑定”。不幸的是，真正的双向绑定会带来维护上的问题，因为子组件可以变更父组件，且在父组件和子组件两侧都没有明显的变更来源。
+			 -->
+			 
+			<my-title v-bind:title="doc.title"
+				v-on:update:title="doc.title = $event"
+			></my-title>
+		</div>
+		
+		<!-- ===========================================内容脚本分界线=========================================== -->
+		<script src="../statics/vue-2.7.14.js"></script>
+		<script type="text/javascript">
+			Vue.component('my-title',{
+				props:['title'],
+				data:{
+					newTitle(){
+						return "abc"
+					}
+				},
+				template:`
+				<button @click="$emit('update:title', newTitle)">点击</button>
+				`
+				
+			});
+			
+			new Vue({
+				el:'#app',
+				data:{
+					doc:{
+						title:'bar'
+					}
+				}
+			})
+		</script>
+	</body>
+</html>

@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<!--
+			前言： Prop的作用，Prop的作用是从组件上传值到子组件。子组件会继承从组件传来的attribute
+			根元素，template属性中，最外层的元素被称为根元素，Vue限制所有的组件必须为单个根元素
+			$attrs property ，$attrs 是一个对象，包含了传递给一个组件的 attribute 名和 attribute 值，例如：
+			{
+			  required: true,
+			  placeholder: 'Enter your username'
+			}
+			
+			inheritAttrs: false, 根元素无法再得到组件上的值
+			
+			使用 inheritAttrs: false 和 $attrs 的配合使用，可以让我们指定attribute赋予哪个元素
+		 -->
+	</head>
+	<body>
+		<div id="app">
+			<!-- 
+				<base-input
+				  label="Username:"
+				  v-model="username"
+				  required
+				  placeholder="Enter your username"
+				></base-input>
+				======================================================================================================
+				
+				这里向子组件传递了三个attribute
+				$attrs:{
+					label="Username:"
+					required
+					placeholder="Enter your username"
+				}
+				
+				其中， v-model又包含了value和input，v-model属于指令，它不会被attrs传递
+				v-model:{
+					v-bind:value="username"
+					//$event就是事件触发之后返回的结果
+					v-on:input="username = $event"	
+				}
+				
+				所以:$attrs的完整传输应该是这样的
+				{
+					label="Username:"
+					{
+						v-bind:value="username"
+						v-on:input="username = $event"
+					}
+					required //默认为true
+					placeholder="Enter your username"
+				}
+				
+				
+			 -->
+			<base-input
+			  label="Username:"
+			  v-model="username"
+			  required
+			  placeholder="Enter your username"
+			></base-input>
+			
+			<!-- 组件内部代码
+			inheritAttrs:false,
+			props:['label','value'],
+			<label>
+			{{label}}
+			<input 
+			v-bind="$attrs"	
+			:value="value"	
+			@input="$emit('input',$event.target.value)">
+			</label>
+			
+			-----------------------------------------------------------------------------------------------------
+			inheritAttrs:false -- 让非根元素的子组件也能访问组件传输的数据
+			props:['lable','value'] -- 定义需要使用的props
+			-----------------------------------------------------------------------------------------------------
+			v-bind="$attrs"实际上就是把组件的所有attribute封装为对象传递给子组件
+			<input
+			v-bind="$attrs">
+			等价于
+			<input
+				v-bind:label="$attrs.label"
+				v-bind:required="$attrs.required"
+				v-bind:placeholder="$attrs.placeholder"
+			>
+			required 与 placeholder 是input的固有attribute，所以绑定后就会生效，label不属于input固有attribute, 并没有被用到
+			======================================================================================================
+			v-bind="xxx" v-bind后面不跟propertyName的话，会传递一个对象的所有 property
+			例如：
+			post: {
+				id: 1,
+				title: 'My Journey with Vue'
+			}
+			
+			<blog-post v-bind="post"></blog-post>
+			等价于
+			<blog-post
+			  v-bind:id="post.id"
+			  v-bind:title="post.title"
+			></blog-post>
+			=========================================================================================================
+			
+			
+			-->
+			
+		</div>
+		<!-- ===========================================内容脚本分界线=========================================== -->
+		<script src="../statics/vue-2.7.14.js"></script>
+		<script type="text/javascript">
+			Vue.component('base-input',{
+				inheritAttrs:false,
+				props:['label','value'],
+				/* 
+					v-bind:'$attrs', 把所有的atrribute绑定到当前组件
+					
+					:value="value",
+					@input="$.emit('input',$event.target.value)"
+					v-model绑定预设置
+				 */
+				template:`
+					<label>
+						{{label}}
+						<input 
+						v-bind="$attrs"	
+						:value="value"	
+						@input="$emit('input',$event.target.value)">
+					</label>
+				`
+			})
+			
+			new Vue({
+				el:'#app',
+				data:{
+					username:'千树'
+				}
+			})
+		</script>
+	</body>
+</html>

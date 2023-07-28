@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<div id="app">
+			<navigation-link url="/profile">
+			  Your Profile
+			</navigation-link>
+			<hr>
+			<!-- 当组件渲染的时候，<slot></slot> 将会被替换为“Your Profile”。插槽内可以包含任何模板代码，包括 HTML： -->
+			<navigation-link url="/profile">
+			  <!-- 添加一个 Font Awesome 图标 -->
+			  <span class="fa fa-user"></span>
+			  Your Profile
+			</navigation-link>
+			<hr>
+			<!-- 甚至其它的组件： -->
+			<navigation-link url="/profile">
+			  <!-- 添加一个图标的组件 -->
+			  <font-awesome-icon name="user"></font-awesome-icon>
+			  Your Profile
+			</navigation-link>
+			
+			<!-- 如果 <navigation-link> 的 template 中没有包含一个 <slot> 元素，则该组件起始标签和结束标签之间的任何内容都会被抛弃。 -->
+		</div>
+		<!-- ===========================================内容脚本分界线=========================================== -->
+		<script src="../statics/vue-2.7.14.js"></script>
+		<script type="text/javascript">
+			
+			
+			Vue.component('navigation-link',{
+				template:`
+					<a
+					  v-bind:href="url"
+					  class="nav-link"
+					>
+					  <slot></slot>
+					</a>
+				`
+			})
+			
+			Vue.component('font-awesome-icon',{
+				props:['name'],
+				template:`<p>{{name}}</P>`
+			})
+			
+			new Vue({
+				el:'#app',
+				data:{
+				
+				}
+			})
+		</script>
+	</body>
+</html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<div id="app">
+			
+		</div>
+		<!-- ===========================================内容脚本分界线=========================================== -->
+		<script src="../statics/vue-2.7.14.js"></script>
+		<script type="text/javascript">
+			/*
+			官方说明：
+			在大型应用中，我们可能需要将应用分割成小一些的代码块，并且只在需要的时候才从服务器加载一个模块。为了简化，Vue 允许你以一个工厂函数的方式定义你的组件，这个工厂函数会异步解析你的组件定义。Vue 只有在这个组件需要被渲染的时候才会触发该工厂函数，且会把结果缓存起来供未来重渲染。例如：
+			 */
+			Vue.component('async-example',function(resolve,reject,connected){
+				/* 
+					个人理解：
+					一般情况下，组件注册之后就会被渲染，方便后续使用
+					
+					异步组件使用的时函数，只有组件被使用的时候，会调用工厂函数，渲染组件。工厂函数内部可以定义多个回调函数
+					
+					回调函数，工厂函数里面可以包裹多个回调函数，以resolve为例，当使用`async-example`时，这个函数会被调用
+				 */
+				//组件resolve
+				resolve({template: '<div>I am async!</div>'});
+				//组件rejct
+				reject({template: '<div>Error, rejected!</div>'});
+				//组件connected
+				connected({template: '<div>Connected sccussefully√</div>'})
+				
+			})
+			//异步组件过于复杂，未能达到所能理解的底部，略...
+			
+			new Vue({
+				el:'#app',
+				data:{
+					
+				}
+			})
+		</script>
+	</body>
+</html>

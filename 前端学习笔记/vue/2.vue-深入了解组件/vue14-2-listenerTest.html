@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		
+		<!-- 总结：
+			组件到底是什么？
+			组件时Vue的实例对象，也就是说Vue.component(//...)的结果是Vue的实例
+			
+			'$'前缀表示的含义：
+			带有'$'前缀的是实例的property 方法、数据、事件等等
+			
+			$emit真正的的作用：
+			之前的学习中，我把$emit函数称为抛出函数，实际上叫它触发器更合适，他会触发事件，并把参数传递给触发事件所用的参数
+			
+			v-on与v-bind
+			他们在后面不跟property的情况下，都会自动绑定所有的property与监听器
+			
+			
+		 -->
+	</head>
+	<body>
+		<div id="app">
+			<base-input label="userName" v-model="inputMsg"></base-input>
+		</div>
+		<!-- ===========================================内容脚本分界线=========================================== -->
+		<script src="../statics/vue-2.7.14.js"></script>
+		<script type="text/javascript">
+			let vc=Vue.component('base-input', {
+				//inheritAttrs: false,
+				props: ['label', 'value'],
+				computed: {
+					inputListeners: function () {
+						let vm = this //this是组件本身
+						return{	
+							input: function (event) {vm.$emit('input', event.target.value)},
+							focus:function(){vm.$emit('focus',console.log('focused'))}
+						}
+					}
+				},
+				template: `
+					<label>
+						{{ label }}
+						<input
+							v-bind="$attrs"
+							v-bind:value="value"
+							v-on="inputListeners"
+						>
+					</label>
+				`
+			})
+			
+			let vme=new Vue({
+				el:'#app',
+				data:{
+					inputMsg:'hello world'
+				}
+			})
+		</script>
+	</body>
+</html>

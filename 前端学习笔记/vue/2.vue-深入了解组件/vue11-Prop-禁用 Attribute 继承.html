@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<!--
+			前言： Prop的作用，Prop的作用是从组件上传值到子组件。子组件会继承从组件传来的attribute
+			根元素，template属性中，最外层的元素被称为根元素，Vue限制所有的组件必须为单个根元素
+			$attrs property ，$attrs 是一个对象，包含了传递给一个组件的 attribute 名和 attribute 值，例如：
+			{
+			  required: true,
+			  placeholder: 'Enter your username'
+			}
+			
+			inheritAttrs: false, 根元素无法再得到组件上的值
+			
+			使用 inheritAttrs: false 和 $attrs 的配合使用，可以让我们指定attribute赋予哪个元素
+		 -->
+		<div id="app">
+			<!--
+			 注意 inheritAttrs: false 选项不会影响 style 和 class 的绑定。
+			 
+			 这个模式允许你在使用基础组件的时候更像是使用原始的 HTML 元素，而不会担心哪个元素是真正的根元素：
+			 -->
+			 <base-input
+			   label="Username:"
+			   v-model="username"
+			   required
+			   placeholder="Enter your username"
+			 ></base-input>
+			
+		</div>
+		
+		<!-- ===========================================内容脚本分界线=========================================== -->
+		<script src="../statics/vue-2.7.14.js"></script>
+		<script type="text/javascript">
+			//如果你不希望组件的根元素继承 attribute，你可以在组件的选项中设置 inheritAttrs: false。例如：
+			Vue.component('my-component', {
+			  inheritAttrs: false,
+			  // ...
+			})
+			
+			//有了 inheritAttrs: false 和 $attrs，你就可以手动决定这些 attribute 会被赋予哪个元素。在撰写基础组件的时候是常会用到的：
+			Vue.component('base-input', {
+			  inheritAttrs: false,
+			  props: ['label', 'value'],
+			  template: `
+			    <label>
+			      {{ label }}
+			      <input
+			        v-bind="$attrs"
+			        v-bind:value="value"
+			        v-on:input="$emit('input', $event.target.value)"
+			      >
+			    </label>
+			  `
+			})
+			
+			new Vue({
+				el:'#app',
+				data:{
+					
+				}
+			})
+		</script>
+	</body>
+</html>

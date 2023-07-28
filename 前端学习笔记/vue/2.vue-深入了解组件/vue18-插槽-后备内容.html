@@ -1,0 +1,37 @@
+	<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<div id="app">
+			<!-- 现在当我在一个父级组件中使用 <submit-button> 并且不提供任何插槽内容时： -->
+			<submit-button></submit-button><hr>
+			<!-- 但是如果我们提供内容： -->
+			<submit-button>
+			  Save
+			</submit-button>
+		</div>
+		<!-- ===========================================内容脚本分界线=========================================== -->
+		<script src="../statics/vue-2.7.14.js"></script>
+		<script type="text/javascript">
+			Vue.component('submit-button',{
+				//我们可能希望这个 <button> 内绝大多数情况下都渲染文本“Submit”。为了将“Submit”作为后备内容，我们可以将它放在 <slot> 标签内：
+				template:
+				`
+				<button type="submit">
+				  <slot>Submit</slot>
+				</button>
+				`
+			})
+			
+			new Vue({
+				el:'#app',
+				data:{
+					
+				}
+			})
+		</script>
+	</body>
+</html>

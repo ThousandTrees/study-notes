@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<div id="app">
+			<!-- 动态指令参数也可以用在 v-slot 上，来定义动态的插槽名： -->
+			<select>
+				<option v-for="name in names" v-bind:value="name">{{name}}</option>
+			</select>
+			<base-layout>
+			  <template v-slot:[dynamicSlotName]>
+			    this is {{dynamicslotname}}
+			  </template>
+			</base-layout>
+		</div>
+		<!-- ===========================================内容脚本分界线=========================================== -->
+		<script src="../statics/vue-2.7.14.js"></script>
+		<script type="text/javascript">
+			Vue.component('base-layout',{
+				props:[],
+				template:
+				`
+				<div class="container">
+				  <header>
+				    <slot name="header"></slot>
+				  </header>
+				  <main>
+				    <slot></slot>
+				  </main>
+				  <footer>
+				    <slot name="footer"></slot>
+				  </footer>
+				</div>
+				`
+			})
+			
+			new Vue({
+				el:'#app',
+				data:{
+					names:['header','default','footer'],
+					dynamicslotname:'default',
+					
+				}
+			})
+		</script>
+	</body>
+</html>

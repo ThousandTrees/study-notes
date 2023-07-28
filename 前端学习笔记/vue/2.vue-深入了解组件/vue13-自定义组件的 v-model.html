@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<div id="app">
+			<p>一个组件上的 v-model 默认会利用名为 value 的 prop 和名为 input 的事件，但是像单选框、复选框等类型的输入控件可能会将 value attribute 用于不同的目的。model 选项可以用来避免这样的冲突：</p>
+			<base-checkbox v-model="lovingVue"></base-checkbox>
+			
+			<p>这里的 lovingVue 的值将会传入这个名为 checked 的 prop。同时当 <base-checkbox> 触发一个 change 事件并附带一个新的值的时候，这个 lovingVue 的 property 将会被更新。</p>
+		</div>
+		<!-- ===========================================内容脚本分界线=========================================== -->
+		<script src="../statics/vue-2.7.14.js"></script>
+		<script type="text/javascript">
+			Vue.component('base-checkbox', {
+			  model: {
+			    prop: 'checked',
+			    event: 'change'
+			  },
+			  props: {
+			    checked: Boolean
+			  },
+			  template:
+			   `
+			   <div>
+			    <input
+			      type="checkbox"
+			      v-bind:checked="checked"
+			      v-on:change="$emit('change', $event.target.checked)"
+			    ><p>{{checked}}</p>
+				</div>
+			  `
+			})
+			
+			new Vue({
+				el:'#app',
+				data:{
+					lovingVue:false
+				}
+			})
+		</script>
+	</body>
+</html>

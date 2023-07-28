@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<div id="app">
+			<base-input label="userName" v-model="inputMsg"></base-input>
+		</div>
+		<!-- ===========================================内容脚本分界线=========================================== -->
+		<script src="../statics/vue-2.7.14.js"></script>
+		<script type="text/javascript">
+			Vue.component('base-input', {
+				inheritAttrs: false,
+				props: ['label', 'value'],
+				/* 注：此处由于知识限制，我并不知道$listeners会有什么监听器，但是并不影响最终结果
+				
+					以'$'符号开头的，都是代表了一个对象本身，而不是这个对象的对象名。对象是匿名对象
+					
+					假设组件都会自带的有默认的监听器，比如下面这些，默认监听器
+					$listeners: {
+					  focus: function (event) { // ... }
+					  input: function (value) { // ... },
+					}
+					
+					Object.assign函数，将所有的对象合并为一个新对象。
+					假设$listeners已经存在了input监听器，所以第三个对象{input:...}会覆写$listeners里面的input监听器
+					
+					最终合成的对象：
+					inputListeners:{
+						focus: function (event) { // ... }
+						input: function (event) {vm.$emit('input', event.target.value)}
+					}
+					
+					---------------------------------------------------------------------------------
+					组件也可能没有任何监听器：
+					所以最终合并会得到：
+					inputListeners:{
+						input: function (event) {vm.$emit('input', event.target.value)}
+					}
+					
+					$emit: 内建的方法，它属于组件。通常组件向子组件传递数据是传递给根元素，
+					这里使用了inheritAttrs: false 使根元素无法再使用
+					
+					
+				 */
+				computed: {
+					inputListeners: function () {
+						let vm = this //this是组件本身
+						return Object.assign(	 // Object.assign 将所有的对象合并为一个新对象
+							{},					 // 第一个参数是返回值，合并后得到的新对象
+							this.$listeners,	 // 第二个参数可以是任意对象
+							{			         // 第三个参数要求是input事件监听器，会覆盖原来的input监听器 
+								input: function (event) {vm.$emit('input', event.target.value)}
+							}
+						)
+					}
+				},
+				template: `
+					<label>
+						{{ label }}
+						<input
+							v-bind="$attrs"
+							v-bind:value="value"
+							v-on="inputListeners"
+						>
+					</label>
+				`
+			})
+			
+			let vm=new Vue({
+				el:'#app',
+				data:{
+					inputMsg:'hello world'
+				}
+			})
+		</script>
+	</body>
+</html>
